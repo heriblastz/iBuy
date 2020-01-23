@@ -33,7 +33,7 @@ class MyApp extends StatelessWidget {
       child: MaterialApp(
         title: 'iBuy',
         theme: ThemeData(
-            primaryColor: Color(0xffffffff), brightness: Brightness.light),
+            primaryColor: Color(0xffffffff), brightness: Brightness.light, accentColor: Colors.black),
         home: Landing(),
         //home: AddPayees(),
         routes: routes,

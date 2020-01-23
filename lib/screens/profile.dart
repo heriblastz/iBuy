@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:ibuy/screens/login.dart';
 import 'package:ibuy/screens/register.dart';
+import 'package:ibuy/widget/blackButton.dart';
 
 class Profile extends StatelessWidget {
   @override
@@ -34,18 +35,26 @@ class Profile extends StatelessWidget {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: <Widget>[
-                    RaisedButton(
-                      elevation: 5,
-                      color: Colors.white,
-                      child: Text("Login"),
-                      onPressed: () => Navigator.of(context).pushNamed(Login.tag),
+                    BlackButton(
+                      title: 'Login',
+                      onPress: () => Navigator.of(context).pushNamed(Login.tag),
                     ),
-                    RaisedButton(
-                      elevation: 5,
-                      color: Colors.white,
-                      child: Text("Register"),
-                      onPressed: () => Navigator.of(context).pushNamed(Register.tag),
+                    BlackButton(
+                      title: 'Register',
+                      onPress: () => Navigator.of(context).pushNamed(Register.tag),
                     )
+                    // RaisedButton(
+                    //   elevation: 5,
+                    //   color: Colors.white,
+                    //   child: Text("Login"),
+                    //   onPressed: () => Navigator.of(context).pushNamed(Login.tag),
+                    // ),
+                    // RaisedButton(
+                    //   elevation: 5,
+                    //   color: Colors.white,
+                    //   child: Text("Register"),
+                    //   onPressed: () => Navigator.of(context).pushNamed(Register.tag),
+                    // )
                   ],
                 ),
               )

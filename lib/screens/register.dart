@@ -1,4 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:ibuy/validators/utils.dart';
+import 'package:ibuy/widget/acmeFont.dart';
+import 'package:ibuy/widget/background.dart';
+import 'package:ibuy/widget/blackButton.dart';
+import 'package:ibuy/widget/floatingCard.dart';
+import 'package:ibuy/widget/secTheme.dart';
 
 class Register extends StatefulWidget {
   static String tag = 'register';
@@ -10,98 +16,109 @@ class _RegisterState extends State<Register> {
   TextEditingController nameController = new TextEditingController();
   TextEditingController emailController = new TextEditingController();
   TextEditingController passwordController = new TextEditingController();
+  final FocusNode nameFocus = FocusNode();
+  final FocusNode usernameFocus = FocusNode();
+  final FocusNode emailFocus = FocusNode();
+  final FocusNode passwordFocus = FocusNode();
+  final _formKey = GlobalKey<FormState>();
   bool _passwordHide = true;
 
   @override
   Widget build(BuildContext context) {
-    // TODO: implement build
     return Scaffold(
         appBar: AppBar(
           title: Text("Register"),
         ),
-        body: Theme(
-          data: Theme.of(context).copyWith(
-              primaryColor: Colors.black,
-              hintColor: Colors.black54,
-              focusColor: Colors.black),
-          child: Container(
-              decoration: BoxDecoration(
-                  image: DecorationImage(
-                      image: AssetImage("assets/images/seamless-bg.jpg"),
-                      fit: BoxFit.cover)),
+        resizeToAvoidBottomInset: false,
+        body: SecTheme(
+          child: MainBackground(
               padding: EdgeInsets.all(20),
-              child: Material(
-                  borderRadius: BorderRadius.circular(20),
-                  color: Colors.white,
-                  elevation: 10,
-                  child: Container(
-                    padding: EdgeInsets.all(20),
-                    child: ListView(
-                      // mainAxisAlignment: MainAxisAlignment.center,
-                      children: <Widget>[
-                        SizedBox(height: 20),
-                        Text(
-                          "Register Form",
-                          style:
-                              TextStyle(fontSize: 50, fontFamily: 'AcmeFont'),
-                              textAlign: TextAlign.center,
-                        ),
-                        SizedBox(height: 30),
-                        TextField(
-                          style: TextStyle(color: Colors.black, fontSize: 15),
-                          controller: nameController,
-                          decoration: InputDecoration(
-                              labelText: 'Full Name',
-                              hintText: 'Enter your full name'),
-                        ),
-                        TextField(
-                          style: TextStyle(color: Colors.black, fontSize: 15),
-                          controller: usernameController,
-                          decoration: InputDecoration(
-                              labelText: 'Username',
-                              hintText: 'Enter your username'),
-                        ),
-                        TextField(
-                          style: TextStyle(color: Colors.black, fontSize: 15),
-                          controller: emailController,
-                          decoration: InputDecoration(
-                              labelText: 'Email', hintText: 'Enter your email'),
-                        ),
-                        TextField(
-                          style: TextStyle(color: Colors.black, fontSize: 15),
-                          obscureText: _passwordHide,
-                          controller: passwordController,
-                          decoration: InputDecoration(
-                              labelText: 'Password',
-                              hintText: 'Enter your password',
-                              suffixIcon: InkWell(
-                                child: Icon(_passwordHide
-                                    ? Icons.visibility_off
-                                    : Icons.visibility),
-                                onTap: () {
-                                  setState(() {
-                                    _passwordHide = !_passwordHide;
-                                  });
-                                },
-                              )),
-                        ),
-                        SizedBox(
-                          height: 20,
-                        ),
-                        RaisedButton(
-                          onPressed: () {},
-                          shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(20)),
-                          elevation: 10,
-                          child: Text(
-                            "Register",
-                            style: TextStyle(color: Colors.white),
-                          ),
-                          color: Colors.black,
-                        )
-                      ],
+              child: Form(
+                key: _formKey,
+                child: FloatingCard(
+                  children: <Widget>[
+                    SizedBox(height: 20),
+                    AcmeTitle(text: "Register Form"),
+                    SizedBox(height: 30),
+                    TextFormField(
+                      focusNode: nameFocus,
+                      style: TextStyle(color: Colors.black, fontSize: 15),
+                      controller: nameController,
+                      validator: (val) => Val.ValidateName(val),
+                      keyboardType: TextInputType.text,
+                      textInputAction: TextInputAction.next,
+                      onFieldSubmitted: (v) {
+                        FocusScope.of(context).requestFocus(usernameFocus);
+                      },
+                      decoration: InputDecoration(
+                          labelText: 'Full Name',
+                          hintText: 'Enter your full name'),
                     ),
-                  ))),
+                    TextFormField(
+                      focusNode: usernameFocus,
+                      style: TextStyle(color: Colors.black, fontSize: 15),
+                      controller: usernameController,
+                      validator: (val) => Val.ValidateUsername(val),
+                      keyboardType: TextInputType.text,
+                      textInputAction: TextInputAction.next,
+                      onFieldSubmitted: (v) {
+                        FocusScope.of(context).requestFocus(emailFocus);
+                      },
+                      decoration: InputDecoration(
+                          labelText: 'Username',
+                          hintText: 'Enter your username'),
+                    ),
+                    TextFormField(
+                      focusNode: emailFocus,
+                      style: TextStyle(color: Colors.black, fontSize: 15),
+                      controller: emailController,
+                      keyboardType: TextInputType.emailAddress,
+                      textInputAction: TextInputAction.next,
+                      validator: (val) => Val.ValidateEmail(val),
+                      onFieldSubmitted: (v) {
+                        FocusScope.of(context).requestFocus(passwordFocus);
+                      },
+                      decoration: InputDecoration(
+                          labelText: 'Email', hintText: 'Enter your email'),
+                    ),
+                    TextFormField(
+                      focusNode: passwordFocus,
+                      style: TextStyle(color: Colors.black, fontSize: 15),
+                      obscureText: _passwordHide,
+                      controller: passwordController,                      
+                      textInputAction: TextInputAction.done,
+                      validator: (val) => Val.ValidateEmail(val),
+                      decoration: InputDecoration(
+                          labelText: 'Password',
+                          hintText: 'Enter your password',
+                          suffixIcon: InkWell(
+                            child: Icon(_passwordHide
+                                ? Icons.visibility_off
+                                : Icons.visibility),
+                            onTap: () {
+                              setState(() {
+                                _passwordHide = !_passwordHide;
+                              });
+                            },
+                          )),
+                    ),
+                    SizedBox(
+                      height: 20,
+                    ),
+                    BlackButton(
+                      title: "Register",
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(20)),
+                      onPress: () {
+                        if (_formKey.currentState.validate()) {
+                          print("success");
+                          // _onPressRegister();
+                        }
+                      },
+                    )
+                  ],
+                ),
+              )),
         ));
   }
 }
