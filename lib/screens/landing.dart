@@ -12,9 +12,6 @@ class Landing extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     Widget body(AppState store) {
-      // if (store.message == null)
-      //   Timer(Duration(seconds: 2),
-      //       () => StoreProvider.of<AppState>(context).dispatch(GetMessage()));
       return Container(
         decoration: BoxDecoration(
             image: DecorationImage(
@@ -27,7 +24,7 @@ class Landing extends StatelessWidget {
             Text(
               "iBuy",
               style: TextStyle(
-                  fontSize: MediaQuery.of(context).size.width * 0.6,
+                  fontSize: MediaQuery.of(context).size.width * 0.4,
                   fontWeight: FontWeight.bold,
                   fontFamily: 'AcmeFont'),
             ),

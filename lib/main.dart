@@ -4,6 +4,8 @@ import 'package:ibuy/redux/app_state.dart';
 import 'package:ibuy/redux/reducer.dart';
 import 'package:ibuy/screens/bottomBar.dart';
 import 'package:ibuy/screens/landing.dart';
+import 'package:ibuy/screens/login.dart';
+import 'package:ibuy/screens/register.dart';
 import 'package:redux/redux.dart';
 import 'package:redux_thunk/redux_thunk.dart';
 
@@ -19,7 +21,9 @@ class MyApp extends StatelessWidget {
   MyApp({this.store});
   final routes = <String, WidgetBuilder>{
     Landing.tag: (context) => Landing(),
-    BottomBar.tag: (context) => BottomBar()
+    BottomBar.tag: (context) => BottomBar(),
+    Register.tag: (context) => Register(),
+    Login.tag: (context) => Login()
   };
 
   @override
