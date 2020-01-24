@@ -44,7 +44,7 @@ class _BottomBarState extends State<BottomBar> {
               title: new Text('Catalogue'),
             ),
             BottomNavigationBarItem(
-              icon: new Icon(Icons.compare_arrows),
+              icon: new Icon(Icons.swap_horiz),
               title: new Text('Transaction'),
             ),
             BottomNavigationBarItem(

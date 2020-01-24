@@ -25,12 +25,14 @@ class _LoginState extends State<Login> {
         appBar: AppBar(
           title: Text("Login"),
         ),
+        resizeToAvoidBottomInset: false,
         body: SecTheme(
           child: MainBackground(
               padding: EdgeInsets.all(20),
               child: Form(
                 key: _formKey,
                 child: FloatingCard(
+                  useListView: true,
                   children: <Widget>[
                     SizedBox(height: 20),
                     AcmeTitle(

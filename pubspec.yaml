@@ -14,7 +14,7 @@ description: A new Flutter project.
 version: 1.0.0+1
 
 environment:
-  sdk: ">=2.2.0 <3.0.0"
+  sdk: ">=2.2.2 <3.0.0"
 
 dependencies:
   flutter:
@@ -50,6 +50,7 @@ flutter:
         - asset: fonts/Acme-Regular.ttf
   assets:
     - assets/images/
+    - assets/configs/
 
 
   # To add assets to your application, add an assets section, like this:

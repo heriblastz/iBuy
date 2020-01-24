@@ -32,7 +32,7 @@ class Val {
     if (val.isEmpty) {
       return "Username cannot be empty";
     } else if (exp.hasMatch(val.trim()) == false) {
-      return "Invalid email format";
+      return "Invalid username format";
     }
   }
 

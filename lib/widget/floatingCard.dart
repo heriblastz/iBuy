@@ -2,8 +2,9 @@ import 'package:flutter/material.dart';
 
 class FloatingCard extends StatelessWidget {
   final List<Widget> children;
+  final bool useListView;
 
-  FloatingCard({@required this.children});
+  FloatingCard({@required this.children, @required this.useListView});
   Widget build(BuildContext context) {
     return Material(
         borderRadius: BorderRadius.circular(20),
@@ -11,7 +12,11 @@ class FloatingCard extends StatelessWidget {
         elevation: 10,
         child: Container(
           padding: EdgeInsets.all(20),
-          child: ListView(children: children),
+          child: useListView
+              ? ListView(children: children)
+              : Column(
+                  children: children
+                ),
         ));
   }
 }
