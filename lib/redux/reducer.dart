@@ -7,19 +7,15 @@ import 'actions.dart';
 
 AppState reducer(AppState prevState, dynamic action) {
   AppState newState = AppState.copyWith(prevState);
-  switch (action) {
-    case LoadingProccess:
-    print("proccess");
-      newState.loading = true;
-      break;
-    case RegisterSuccess:
-      print("success");
-      newState.loading = false;
-      break;
-    case RegisterFailed:
-      newState.loading = false;
-      print("failed");
-      break;
+  if (action is LoadingProccess) {
+    newState.loading = true;
+  } else if (action is SetUser) {
+    newState.firstname = action.firstname;
+    newState.lastname = action.lastname;
+    newState.email = action.email;
+    newState.password = action.password;
+    newState.username = action.username;
+    newState.loading = false;
   }
   return newState;
 }

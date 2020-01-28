@@ -1,3 +1,4 @@
+import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:ibuy/screens/catalogue.dart';
 import 'package:ibuy/screens/message.dart';
@@ -13,6 +14,7 @@ class BottomBar extends StatefulWidget {
 
 class _BottomBarState extends State<BottomBar> {
   int _currentIndex = 0;
+  GlobalKey _bottomNavigationKey = GlobalKey();
 
   void _onTabTapped(int index) {
     setState(() {
@@ -28,6 +30,23 @@ class _BottomBarState extends State<BottomBar> {
       Message(),
       Profile()
     ];
+
+    final Widget animatedNav = new CurvedNavigationBar(
+      backgroundColor: Colors.black87,
+      height: 50,
+      key: _bottomNavigationKey,
+      items: <Widget>[
+        Icon(Icons.book, size: 30),
+        Icon(Icons.swap_horiz, size: 30),
+        Icon(Icons.mail, size: 30),
+        Icon(Icons.person, size: 30),
+      ],
+      onTap: (index) {
+        setState(() {
+          _currentIndex = index;
+        });
+      },
+    );
 
     final bottomNav = new Theme(
         data: Theme.of(context).copyWith(
@@ -55,6 +74,6 @@ class _BottomBarState extends State<BottomBar> {
         ));
 
     return Scaffold(
-        body: _children[_currentIndex], bottomNavigationBar: bottomNav);
+        body: _children[_currentIndex], bottomNavigationBar: animatedNav);
   }
 }

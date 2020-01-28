@@ -21,7 +21,7 @@ class Val {
 
     if (val.isEmpty) {
       return "Email or Username cannot be empty";
-    } else if (!username.hasMatch(val) || !email.hasMatch(val)) {
+    } else if (!username.hasMatch(val) && !email.hasMatch(val)) {
       return "Invalid format";
     }
   }

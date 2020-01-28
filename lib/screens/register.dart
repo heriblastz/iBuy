@@ -1,11 +1,17 @@
+import 'dart:async';
+
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:ibuy/redux/actions.dart';
+import 'package:ibuy/screens/login.dart';
+import 'package:ibuy/utils/getServer.dart';
 import 'package:ibuy/validators/utils.dart';
 import 'package:ibuy/widget/acmeFont.dart';
 import 'package:ibuy/widget/background.dart';
 import 'package:ibuy/widget/blackButton.dart';
 import 'package:ibuy/widget/floatingCard.dart';
+import 'package:ibuy/widget/loadingCard.dart';
 import 'package:ibuy/widget/secTheme.dart';
 import 'package:ibuy/redux/app_state.dart';
 
@@ -25,10 +31,18 @@ class _RegisterState extends State<Register> {
   final FocusNode passwordFocus = FocusNode();
   final _formKey = GlobalKey<FormState>();
   bool _passwordHide = true;
+  bool isLoading = false;
+
+  void setLoading(bool value) {
+    setState(() {
+      isLoading = value;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
-    void _onPressRegister() {
+    void _onPressRegister() async {
+      setLoading(true);
       List<String> separateName = nameController.text.split(' ');
       Map<String, String> payload = {
         "username": usernameController.text,
@@ -38,8 +52,25 @@ class _RegisterState extends State<Register> {
         "email": emailController.text,
         "password": passwordController.text
       };
-      StoreProvider.of<AppState>(context)
-          .dispatch(registerUser(payload, context));
+      String uri = (await getConfig())["server"];
+      Dio dio = Dio();
+      await dio.post('$uri/register', data: payload).then((res) {
+        setLoading(false);
+        alertDialog(
+            title: "Success",
+            message: "Account has been created, please login with your account",
+            context: context,
+            closeAction: () => Navigator.of(context)
+              ..pop()
+              ..pushReplacementNamed(Login.tag));
+      }).catchError((err) {
+        setLoading(false);
+        alertDialog(
+            title: "Failed",
+            message: err.response.data["message"],
+            context: context,
+            closeAction: () => Navigator.of(context).pop());
+      });
     }
 
     Widget body(AppState store) {
@@ -61,6 +92,7 @@ class _RegisterState extends State<Register> {
                     validator: (val) => Val.ValidateName(val),
                     keyboardType: TextInputType.text,
                     textInputAction: TextInputAction.next,
+                    textCapitalization: TextCapitalization.words,
                     onFieldSubmitted: (v) {
                       FocusScope.of(context).requestFocus(usernameFocus);
                     },
@@ -105,6 +137,7 @@ class _RegisterState extends State<Register> {
                         labelText: 'Password',
                         hintText: 'Enter your password',
                         suffixIcon: InkWell(
+                          borderRadius: BorderRadius.circular(50),
                           child: Icon(_passwordHide
                               ? Icons.visibility_off
                               : Icons.visibility),
@@ -128,7 +161,6 @@ class _RegisterState extends State<Register> {
                       }
                     },
                   ),
-                  if (store.loading ?? false) CircularProgressIndicator()
                 ],
               ),
             )),
@@ -143,7 +175,7 @@ class _RegisterState extends State<Register> {
         body: StoreConnector<AppState, AppState>(
           converter: (store) => store.state,
           builder: (context, store) {
-            return body(store);
+            return isLoading ? LoadingCard() : body(store);
           },
         ));
   }
