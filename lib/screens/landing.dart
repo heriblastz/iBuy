@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:ibuy/redux/actions.dart';
 import 'package:ibuy/redux/app_state.dart';
+import 'package:ibuy/widget/background.dart';
 import 'package:ibuy/screens/bottomBar.dart';
 
 class Landing extends StatelessWidget {
@@ -12,11 +13,7 @@ class Landing extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     Widget body(AppState store) {
-      return Container(
-        decoration: BoxDecoration(
-            image: DecorationImage(
-                image: AssetImage("assets/images/seamless-bg.jpg"),
-                fit: BoxFit.cover)),
+      return MainBackground(        
         child: Center(
             child: Column(
           mainAxisAlignment: MainAxisAlignment.center,

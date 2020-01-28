@@ -3,6 +3,7 @@ import 'package:flutter_redux/flutter_redux.dart';
 import 'package:ibuy/redux/app_state.dart';
 import 'package:ibuy/redux/reducer.dart';
 import 'package:ibuy/screens/bottomBar.dart';
+import 'package:ibuy/screens/cart.dart';
 import 'package:ibuy/screens/landing.dart';
 import 'package:ibuy/screens/login.dart';
 import 'package:ibuy/screens/register.dart';
@@ -23,7 +24,8 @@ class MyApp extends StatelessWidget {
     Landing.tag: (context) => Landing(),
     BottomBar.tag: (context) => BottomBar(),
     Register.tag: (context) => Register(),
-    Login.tag: (context) => Login()
+    Login.tag: (context) => Login(),
+    Cart.tag: (context) => Cart()
   };
 
   @override
@@ -33,9 +35,8 @@ class MyApp extends StatelessWidget {
       child: MaterialApp(
         title: 'iBuy',
         theme: ThemeData(
-            primaryColor: Color(0xffffffff), brightness: Brightness.light),
+            primaryColor: Color(0xffffffff), brightness: Brightness.light, accentColor: Colors.black),
         home: Landing(),
-        //home: AddPayees(),
         routes: routes,
       ),
     );
