@@ -52,3 +52,64 @@ ThunkAction<AppState> userLogin(payload, context) {
         username: payload['username']));
   };
 }
+
+class AddCartSuccess {}
+
+class AddCartFailed {
+  final String message;
+  AddCartFailed({this.message});
+}
+
+class FinishLoading {}
+
+ThunkAction<AppState> addCart(int id, BuildContext context) {
+  return (Store<AppState> store) async {
+    if (!store.state.loading) {
+      store.dispatch(LoadingProccess());
+      Dio dio = new Dio();
+      Map<String, dynamic> payload = {
+        "email": store.state.email,
+        "password": store.state.password,
+        "id": id
+      };
+      dio
+          .post('http://worlddemo.herokuapp.com/cart/new', data: payload)
+          .then((res) => res.data)
+          .then((data) => {
+                if (data['success'])
+                  {
+                    store.dispatch(FinishLoading()),
+                    alertDialog(
+                        title: 'Success',
+                        message: 'Product added to your Cart',
+                        context: context,
+                        closeAction: () {
+                          Navigator.of(context).pop();
+                        })
+                  }
+                else
+                  {
+                    store.dispatch(FinishLoading()),
+                    store.dispatch(AddCartFailed(message: data['message'])),
+                    alertDialog(
+                        title: 'Failed',
+                        message: data['message'],
+                        context: context,
+                        closeAction: () {
+                          Navigator.of(context).pop();
+                        })
+                  }
+              })
+          .catchError((err) => {
+                store.dispatch(FinishLoading()),
+                alertDialog(
+                    title: 'Failed',
+                    message: err.response.data['message'],
+                    context: context,
+                    closeAction: () {
+                      Navigator.of(context).pop();
+                    })
+              });
+    }
+  };
+}

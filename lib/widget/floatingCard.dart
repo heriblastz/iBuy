@@ -16,11 +16,11 @@ class FloatingCard extends StatelessWidget {
       margin: margin,
       padding: padding,
       child: Material(
-          borderRadius: BorderRadius.circular(20),
+          borderRadius: BorderRadius.circular(10),
           color: Colors.white,
           elevation: 10,
           child: Container(
-            padding: EdgeInsets.all(20),
+            padding: EdgeInsets.all(10),
             child: useListView
                 ? ListView(children: children)
                 : Column(

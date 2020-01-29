@@ -57,7 +57,7 @@ class _LoginState extends State<Login> {
             title: "Failed",
             message: err.response.data["message"],
             context: context,
-            closeAction: () => Navigator.of(context).pop());
+            closeAction: () => Navigator.of(context)..pop());
       });
     }
 

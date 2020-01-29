@@ -1,11 +1,15 @@
 import 'package:carousel_pro/carousel_pro.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_redux/flutter_redux.dart';
+import 'package:ibuy/redux/actions.dart';
+import 'package:ibuy/redux/app_state.dart';
 import 'package:ibuy/screens/byCategory.dart';
 import 'package:ibuy/utils/getServer.dart';
 import 'package:ibuy/widget/background.dart';
 import 'package:ibuy/widget/floatingCard.dart';
 import 'package:ibuy/widget/marqueeWidget.dart';
+import 'package:ibuy/widget/searchBar.dart';
 import 'package:intl/intl.dart';
 
 class ProductDetail extends StatefulWidget {
@@ -20,6 +24,7 @@ class _ProductDetailState extends State<ProductDetail> {
   final NumberFormat moneyFormat = new NumberFormat("#,##0", "en_US");
   bool getCategory = false;
   bool isLoading = true;
+  bool toasted = false;
   List<List> fromCategory = [];
   Dio dio = new Dio();
 
@@ -30,6 +35,11 @@ class _ProductDetailState extends State<ProductDetail> {
   }
 
   Widget build(BuildContext context) {
+    void _onPressCart(AppState store) async {
+      await StoreProvider.of<AppState>(context)
+          .dispatch(addCart(product['id'], context));
+    }
+
     if (!getCategory) {
       setState(() {
         getCategory = true;
@@ -217,7 +227,7 @@ class _ProductDetailState extends State<ProductDetail> {
       );
     }
 
-    Widget body() {
+    Widget body(AppState store) {
       return MainBackground(
         child: ListView(
           children: <Widget>[
@@ -418,12 +428,35 @@ class _ProductDetailState extends State<ProductDetail> {
     }
 
     return Scaffold(
-      body: body(),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {},
-        tooltip: 'Add to Cart',
-        child: Icon(Icons.add),
-      ),
-    );
+        body: StoreConnector<AppState, AppState>(
+          converter: (store) => store.state,
+          builder: (context, store) {
+            return body(store);
+          },
+        ),
+        appBar: AppBar(
+          title: Text(product['title'], overflow: TextOverflow.ellipsis,),
+        ),
+        floatingActionButton: StoreConnector<AppState, AppState>(
+          converter: (store) => store.state,
+          builder: (context, store) {
+            return FloatingActionButton(
+              onPressed: () => _onPressCart(store),
+              tooltip: 'Add to Cart',
+              child: store.loading
+                  ? SizedBox(
+                      width: 20,
+                      height: 20,
+                      child: CircularProgressIndicator(
+                        valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+                      ),
+                    )
+                  : Icon(
+                      Icons.add,
+                      size: 40,
+                    ),
+            );
+          },
+        ));
   }
 }
