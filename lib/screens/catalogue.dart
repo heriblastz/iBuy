@@ -1,3 +1,4 @@
+import 'package:carousel_pro/carousel_pro.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
@@ -70,6 +71,21 @@ class Catalogue extends StatelessWidget {
                               Category(
                                   icon: Icons.verified_user, title: 'Insurance')
                             ],
+                          ),
+                          SizedBox(
+                            height: 20,
+                          ),
+                          Row(
+                            children: <Widget>[
+                              Category(
+                                  icon: Icons.accessibility, title: 'Fashion'),
+                              Category(
+                                  icon: Icons.devices_other,
+                                  title: 'Accessories'),
+                              Category(icon: Icons.pets, title: 'Pets'),
+                              Category(
+                                  icon: Icons.photo_album, title: 'Books')
+                            ],
                           )
                         ],
                       )
@@ -92,7 +108,8 @@ class Catalogue extends StatelessWidget {
                           'asus-banner.jpg',
                           'empty-banner.png',
                           'food-banner.jpg',
-                          'yakult-banner.jpg'
+                          'yakult-banner.jpg',
+                          'paqui-banner.jpg'
                         ].map((i) {
                           return Builder(
                             builder: (BuildContext context) {

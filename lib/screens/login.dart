@@ -57,7 +57,7 @@ class _LoginState extends State<Login> {
             title: "Failed",
             message: err.response.data["message"],
             context: context,
-            closeAction: () => Navigator.of(context).pop());
+            closeAction: () => Navigator.of(context)..pop());
       });
     }
 
@@ -65,68 +65,70 @@ class _LoginState extends State<Login> {
       return SecTheme(
         child: MainBackground(
             padding: EdgeInsets.all(20),
-            child: Form(
-              key: _formKey,
-              child: FloatingCard(
-                useListView: true,
-                children: <Widget>[
-                  SizedBox(height: 20),
-                  AcmeTitle(
-                    text: "Login Form",
-                  ),
-                  SizedBox(height: 30),
-                  TextFormField(
-                    focusNode: emailFocus,
-                    style: TextStyle(color: Colors.black),
-                    validator: (val) => Val.ValidateEmailUsername(val),
-                    controller: emailController,
-                    keyboardType: TextInputType.emailAddress,
-                    textInputAction: TextInputAction.next,
-                    onFieldSubmitted: (v) {
-                      FocusScope.of(context).requestFocus(passwordFocus);
-                    },
-                    decoration: InputDecoration(
-                        labelText: 'Email or Username',
-                        hintText: 'Enter your email or username'),
-                  ),
-                  TextFormField(
-                    focusNode: passwordFocus,
-                    style: TextStyle(color: Colors.black),
-                    obscureText: _passwordHide,
-                    controller: passwordController,
-                    textInputAction: TextInputAction.done,
-                    validator: (val) => Val.ValidatePassword(val),
-                    decoration: InputDecoration(
-                        labelText: 'Password',
-                        hintText: 'Enter your password',
-                        suffixIcon: InkWell(
-                          borderRadius: BorderRadius.circular(50),
-                          child: Icon(_passwordHide
-                              ? Icons.visibility_off
-                              : Icons.visibility),
-                          onTap: () {
-                            setState(() {
-                              _passwordHide = !_passwordHide;
-                            });
+            child: isLoading
+                ? LoadingCard()
+                : Form(
+                    key: _formKey,
+                    child: FloatingCard(
+                      useListView: true,
+                      children: <Widget>[
+                        SizedBox(height: 20),
+                        AcmeTitle(
+                          text: "Login Form",
+                        ),
+                        SizedBox(height: 30),
+                        TextFormField(
+                          focusNode: emailFocus,
+                          style: TextStyle(color: Colors.black),
+                          validator: (val) => Val.ValidateEmailUsername(val),
+                          controller: emailController,
+                          keyboardType: TextInputType.emailAddress,
+                          textInputAction: TextInputAction.next,
+                          onFieldSubmitted: (v) {
+                            FocusScope.of(context).requestFocus(passwordFocus);
                           },
-                        )),
-                  ),
-                  SizedBox(
-                    height: 20,
-                  ),
-                  BlackButton(
-                    title: "Login",
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(20)),
-                    onPress: () {
-                      if (_formKey.currentState.validate()) {
-                        _onPressLogin();
-                      }
-                    },
-                  )
-                ],
-              ),
-            )),
+                          decoration: InputDecoration(
+                              labelText: 'Email or Username',
+                              hintText: 'Enter your email or username'),
+                        ),
+                        TextFormField(
+                          focusNode: passwordFocus,
+                          style: TextStyle(color: Colors.black),
+                          obscureText: _passwordHide,
+                          controller: passwordController,
+                          textInputAction: TextInputAction.done,
+                          validator: (val) => Val.ValidatePassword(val),
+                          decoration: InputDecoration(
+                              labelText: 'Password',
+                              hintText: 'Enter your password',
+                              suffixIcon: InkWell(
+                                borderRadius: BorderRadius.circular(50),
+                                child: Icon(_passwordHide
+                                    ? Icons.visibility_off
+                                    : Icons.visibility),
+                                onTap: () {
+                                  setState(() {
+                                    _passwordHide = !_passwordHide;
+                                  });
+                                },
+                              )),
+                        ),
+                        SizedBox(
+                          height: 20,
+                        ),
+                        BlackButton(
+                          title: "Login",
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(20)),
+                          onPress: () {
+                            if (_formKey.currentState.validate()) {
+                              _onPressLogin();
+                            }
+                          },
+                        )
+                      ],
+                    ),
+                  )),
       );
     }
 
@@ -138,7 +140,7 @@ class _LoginState extends State<Login> {
         body: StoreConnector<AppState, AppState>(
           converter: (store) => store.state,
           builder: (context, store) {
-            return isLoading ? LoadingCard() : body(store);
+            return body(store);
           },
         ));
   }

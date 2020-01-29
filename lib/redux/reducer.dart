@@ -16,6 +16,8 @@ AppState reducer(AppState prevState, dynamic action) {
     newState.password = action.password;
     newState.username = action.username;
     newState.loading = false;
+  } else if (action is FinishLoading) {
+    newState.loading = false;
   }
   return newState;
 }
