@@ -8,6 +8,7 @@ class AppState {
   String address;
   bool loading;
   List catalogues;
+  List cart;
 
   AppState({
     this.firstname,
@@ -18,7 +19,8 @@ class AppState {
     this.username,
     this.address,
     this.loading,
-    this.catalogues
+    this.catalogues,
+    this.cart
   });
 
   AppState.copyWith(AppState newState) {
@@ -31,5 +33,6 @@ class AppState {
     address = newState.address;
     loading = newState.loading;
     catalogues = newState.catalogues;
+    cart = newState.cart;
   }
 }

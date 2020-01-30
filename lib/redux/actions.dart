@@ -23,21 +23,7 @@ class SetUser {
       this.username});
 }
 
-class GetMessage {}
-
 class LoadingProccess {}
-
-class RegisterSuccess {
-  final dynamic data;
-  RegisterSuccess({this.data});
-}
-
-class RegisterFailed {
-  final dynamic data;
-  RegisterFailed({this.data});
-}
-
-class CleanMessage {}
 
 ThunkAction<AppState> userLogin(payload, context) {
   return (Store<AppState> store) async {
@@ -53,16 +39,90 @@ ThunkAction<AppState> userLogin(payload, context) {
   };
 }
 
-class AddCartSuccess {}
-
-class AddCartFailed {
-  final String message;
-  AddCartFailed({this.message});
-}
-
 class FinishLoading {}
 
-ThunkAction<AppState> addCart(int id, BuildContext context) {
+// ThunkAction<AppState> addCart(int id, BuildContext context) {
+//   return (Store<AppState> store) async {
+//     if (!store.state.loading) {
+//       store.dispatch(LoadingProccess());
+//       Dio dio = new Dio();
+//       Map<String, dynamic> payload = {
+//         "email": store.state.email,
+//         "password": store.state.password,
+//         "id": id
+//       };
+//       dio
+//           .post('http://worlddemo.herokuapp.com/cart/new', data: payload)
+//           .then((res) => res.data)
+//           .then((data) => {
+//                 if (data['success'])
+//                   {
+//                     store.dispatch(FinishLoading()),
+//                     alertDialog(
+//                         title: 'Success',
+//                         message: 'Product added to your Cart',
+//                         context: context,
+//                         closeAction: () {
+//                           Navigator.of(context).pop();
+//                         })
+//                   }
+//                 else
+//                   {
+//                     store.dispatch(FinishLoading()),
+//                     store.dispatch(AddCartFailed(message: data['message'])),
+//                     alertDialog(
+//                         title: 'Failed',
+//                         message: data['message'],
+//                         context: context,
+//                         closeAction: () {
+//                           Navigator.of(context).pop();
+//                         })
+//                   }
+//               })
+//           .catchError((err) => {
+//                 store.dispatch(FinishLoading()),
+//                 alertDialog(
+//                     title: 'Failed',
+//                     message: err.response.data['message'],
+//                     context: context,
+//                     closeAction: () {
+//                       Navigator.of(context).pop();
+//                     })
+//               });
+//     }
+//   };
+// }
+
+class SetCart {
+  final List cart;
+  SetCart({this.cart});
+}
+
+ThunkAction<AppState> refreshCart(BuildContext context) {
+  return (Store<AppState> store) async {
+    store.dispatch(LoadingProccess());
+    Dio dio = new Dio();
+    try {
+      final String server = (await getConfig())['server'];
+      List cart = (await dio.post('$server/cart', data: {
+        "email": store.state.email,
+        "password": store.state.password
+      }))
+          .data;
+      store.dispatch(SetCart(cart: cart));
+    } catch (err) {
+      alertDialog(
+          title: 'Failed',
+          message: err.response.data['message'],
+          context: context,
+          closeAction: () {
+            Navigator.of(context).pop();
+          });
+    }
+  };
+}
+
+ThunkAction<AppState> addProduct(int id, BuildContext context) {
   return (Store<AppState> store) async {
     if (!store.state.loading) {
       store.dispatch(LoadingProccess());
@@ -78,19 +138,100 @@ ThunkAction<AppState> addCart(int id, BuildContext context) {
           .then((data) => {
                 if (data['success'])
                   {
+                    store.dispatch(refreshCart(context)),
+                  }
+                else
+                  {
                     store.dispatch(FinishLoading()),
                     alertDialog(
-                        title: 'Success',
-                        message: 'Product added to your Cart',
+                        title: 'Failed',
+                        message: data['message'],
                         context: context,
                         closeAction: () {
                           Navigator.of(context).pop();
                         })
                   }
+              })
+          .catchError((err) => {
+                store.dispatch(FinishLoading()),
+                alertDialog(
+                    title: 'Failed',
+                    message: err.response.data['message'],
+                    context: context,
+                    closeAction: () {
+                      Navigator.of(context).pop();
+                    })
+              });
+    }
+  };
+}
+
+ThunkAction<AppState> removeProduct(int id, BuildContext context) {
+  return (Store<AppState> store) async {
+    if (!store.state.loading) {
+      store.dispatch(LoadingProccess());
+      Dio dio = new Dio();
+      Map<String, dynamic> payload = {
+        "email": store.state.email,
+        "password": store.state.password,
+        "id": id
+      };
+      dio
+          .post('http://worlddemo.herokuapp.com/cart/remove', data: payload)
+          .then((res) => res.data)
+          .then((data) => {
+                if (data['success'])
+                  {
+                    store.dispatch(refreshCart(context)),
+                  }
                 else
                   {
                     store.dispatch(FinishLoading()),
-                    store.dispatch(AddCartFailed(message: data['message'])),
+                    alertDialog(
+                        title: 'Failed',
+                        message: data['message'],
+                        context: context,
+                        closeAction: () {
+                          Navigator.of(context).pop();
+                        })
+                  }
+              })
+          .catchError((err) => {
+                store.dispatch(FinishLoading()),
+                alertDialog(
+                    title: 'Failed',
+                    message: err.response.data['message'],
+                    context: context,
+                    closeAction: () {
+                      Navigator.of(context).pop();
+                    })
+              });
+    }
+  };
+}
+
+ThunkAction<AppState> customProduct(int id, BuildContext context, int quantity) {
+  return (Store<AppState> store) async {
+    if (!store.state.loading) {
+      store.dispatch(LoadingProccess());
+      Dio dio = new Dio();
+      Map<String, dynamic> payload = {
+        "email": store.state.email,
+        "password": store.state.password,
+        "id": id,
+        "quantity": quantity
+      };
+      dio
+          .post('http://worlddemo.herokuapp.com/cart/custom', data: payload)
+          .then((res) => res.data)
+          .then((data) => {
+                if (data['success'])
+                  {
+                    store.dispatch(refreshCart(context)),
+                  }
+                else
+                  {
+                    store.dispatch(FinishLoading()),
                     alertDialog(
                         title: 'Failed',
                         message: data['message'],

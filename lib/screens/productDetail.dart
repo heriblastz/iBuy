@@ -37,7 +37,7 @@ class _ProductDetailState extends State<ProductDetail> {
   Widget build(BuildContext context) {
     void _onPressCart(AppState store) async {
       await StoreProvider.of<AppState>(context)
-          .dispatch(addCart(product['id'], context));
+          .dispatch(addProduct(product['id'], context));
     }
 
     if (!getCategory) {
@@ -443,7 +443,7 @@ class _ProductDetailState extends State<ProductDetail> {
             return FloatingActionButton(
               onPressed: () => _onPressCart(store),
               tooltip: 'Add to Cart',
-              child: store.loading
+              child: store.loading ?? false
                   ? SizedBox(
                       width: 20,
                       height: 20,
